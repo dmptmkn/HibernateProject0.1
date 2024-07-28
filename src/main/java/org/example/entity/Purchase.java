@@ -1,18 +1,24 @@
 package org.example.entity;
 
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-@Builder
+@Entity
+@Table(name = "purchaseList")
 public class Purchase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "student_name")
     private String studentName;
+    @Column(name = "course_name")
     private String courseName;
     private Integer price;
-    private LocalDate subscriptionDate;
+    @Column(name = "subscription_date")
+    private LocalDateTime subscriptionDate;
 
 }

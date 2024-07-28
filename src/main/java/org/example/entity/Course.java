@@ -1,22 +1,27 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
-@Builder
+@Table(name = "courses")
+@Entity
 public class Course {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private Integer duration;
-    private CourseType type;
     private String description;
-    private Teacher teacherId;
+    @Enumerated(EnumType.STRING)
+    private CourseType type;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
+    @Column(name = "students_count")
     private Integer studentsCount;
     private Integer price;
+    @Column(name = "price_per_hour")
     private Float pricePerHour;
-
 }
