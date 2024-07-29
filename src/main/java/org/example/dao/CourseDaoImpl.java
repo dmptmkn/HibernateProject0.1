@@ -13,7 +13,7 @@ import java.util.List;
 public class CourseDaoImpl implements CourseDao {
 
     private static CourseDaoImpl instance;
-    private static final SessionFactory sessionFactory = ConnectionManager.getConnection();
+    private static SessionFactory sessionFactory = ConnectionManager.getConnection();
 
     private static final String GET_ALL_NAMES_QUERY = """
             select name from Course
