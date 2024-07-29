@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.example.entity.*;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,7 +15,6 @@ public class ConnectionManager {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             configuration.configure();
-//            configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
             configuration.addAnnotatedClass(Course.class);
             configuration.addAnnotatedClass(Purchase.class);
             configuration.addAnnotatedClass(Student.class);
