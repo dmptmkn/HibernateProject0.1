@@ -2,10 +2,19 @@ package org.example.entity;
 
 public enum CourseType {
 
-    DESIGN,
-    PROGRAMMING,
-    MARKETING,
-    MANAGEMENT,
-    BUSINESS
+    DESIGN("дизайн"),
+    PROGRAMMING("программирование"),
+    MARKETING("маркетинг"),
+    MANAGEMENT("менеджемент"),
+    BUSINESS("предпринимательство");
 
+    private final String description;
+
+    CourseType(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
