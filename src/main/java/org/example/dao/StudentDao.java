@@ -7,7 +7,7 @@ import java.util.List;
 public interface StudentDao extends Dao<Student> {
 
     List<String> getAllNames();
-    Integer getTotalCount();
+    Long getTotalCount();
     Integer getAverageAge();
 
 }
