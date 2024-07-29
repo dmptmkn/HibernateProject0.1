@@ -15,12 +15,12 @@ public class CourseDaoImpl implements CourseDao {
     private static CourseDaoImpl instance;
     private static SessionFactory sessionFactory = ConnectionManager.getConnection();
 
-    private static final String GET_ALL_NAMES_QUERY = """
-            select name from Course
-            """;
     private static final String FIND_ALL_QUERY = """
             from Course
             """;
+    private static final String GET_ALL_NAMES_QUERY = """
+            select name
+            """ + FIND_ALL_QUERY;
 
     public static CourseDaoImpl getInstance() {
         if (instance == null) {
@@ -30,16 +30,16 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<String> getAllNames() {
+    public List<Course> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(GET_ALL_NAMES_QUERY, String.class).list();
+            return session.createQuery(FIND_ALL_QUERY, Course.class).list();
         }
     }
 
     @Override
-    public List<Course> findAll() {
+    public List<String> getAllNames() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(FIND_ALL_QUERY, Course.class).list();
+            return session.createQuery(GET_ALL_NAMES_QUERY, String.class).list();
         }
     }
 }

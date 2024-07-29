@@ -19,14 +19,14 @@ public class StudentDaoImpl implements StudentDao {
             from Student
             """;
     private static final String GET_ALL_NAMES_QUERY = """
-            select name from Student
-            """;
-    private static final String GET_TOTAL_COUNT_QUERY = """
-            select count(*) from Student
-            """;
+            select name
+            """ + FIND_ALL_QUERY;
     private static final String GET_AVERAGE_AGE_QUERY = """
-            select avg(age) from Student
-            """;
+            select avg(age)
+            """ + FIND_ALL_QUERY;
+    private static final String GET_TOTAL_COUNT_QUERY = """
+            select count(*)
+            """ + FIND_ALL_QUERY;
 
     public static StudentDaoImpl getInstance() {
         if (instance == null) {
@@ -50,16 +50,16 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public Long getTotalCount() {
+    public Integer getAverageAge() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(GET_TOTAL_COUNT_QUERY, Long.class).getSingleResult();
+            return session.createQuery(GET_AVERAGE_AGE_QUERY, Double.class).getSingleResult().intValue();
         }
     }
 
     @Override
-    public Integer getAverageAge() {
+    public Long getTotalCount() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(GET_AVERAGE_AGE_QUERY, Double.class).getSingleResult().intValue();
+            return session.createQuery(GET_TOTAL_COUNT_QUERY, Long.class).getSingleResult();
         }
     }
 }
