@@ -5,7 +5,6 @@ import org.example.dao.CourseDaoImpl;
 import org.example.entity.Course;
 
 import java.io.PrintStream;
-import java.util.List;
 import java.util.Locale;
 
 public class CoursePrinter extends Printer {

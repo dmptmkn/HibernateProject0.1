@@ -6,7 +6,6 @@ import org.example.entity.Student;
 
 import java.io.PrintStream;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class StudentPrinter extends Printer {
 
@@ -27,6 +26,7 @@ public class StudentPrinter extends Printer {
                     s.getRegistrationDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             printStream.println(formattedStudentInfo);
         }
+        printStream.println();
     }
 
     public void printAllNames() {

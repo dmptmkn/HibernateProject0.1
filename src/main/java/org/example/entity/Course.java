@@ -2,9 +2,9 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class Course {
     private String description;
     @Enumerated(EnumType.STRING)
     private CourseType type;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
     @Column(name = "students_count")
@@ -32,13 +32,17 @@ public class Course {
     private Integer price;
     @Column(name = "price_per_hour")
     private Float pricePerHour;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "subscriptions",
+            joinColumns = {@JoinColumn(name = "student_id"), @JoinColumn(name = "course_id")})
+    private Set<Student> students;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (!(o instanceof Course)) return false;
         Course course = (Course) o;
-        return id != null && Objects.equals(id, course.id);
+        return Objects.equals(id, course.id) && Objects.equals(name, course.name) && Objects.equals(duration, course.duration) && Objects.equals(description, course.description) && type == course.type && Objects.equals(teacher, course.teacher) && Objects.equals(studentsCount, course.studentsCount) && Objects.equals(price, course.price) && Objects.equals(pricePerHour, course.pricePerHour) && Objects.equals(students, course.students);
     }
 
     @Override
