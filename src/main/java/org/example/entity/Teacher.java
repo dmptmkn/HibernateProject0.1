@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "courses")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,6 +25,9 @@ public class Teacher {
     private String name;
     private Integer salary;
     private Integer age;
+    @OneToMany
+    @JoinColumn(name = "teacher_id")
+    private Set<Course> courses = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
