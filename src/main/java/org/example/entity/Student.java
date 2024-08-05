@@ -5,11 +5,13 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "courses")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,6 +26,11 @@ public class Student {
     private Integer age;
     @Column(name = "registration_date")
     private LocalDateTime registrationDate;
+    @ManyToMany
+    @JoinTable(name = "subscriptions",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<Course> courses = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
