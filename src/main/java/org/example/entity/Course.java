@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
+@NamedEntityGraph(name = "withTeacher",
+        attributeNodes = {@NamedAttributeNode("teacher")})
 @Getter
 @Setter
-@ToString(exclude = "students")
+@ToString(exclude = {"students", "teacher"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,7 +26,7 @@ public class Course {
     private String description;
     @Enumerated(EnumType.STRING)
     private CourseType type;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
     @Column(name = "students_count")
@@ -38,7 +38,7 @@ public class Course {
     @JoinTable(name = "subscriptions",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private Set<Student> students = new HashSet<>();
+    private List<Student> students = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
