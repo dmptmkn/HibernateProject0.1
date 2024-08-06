@@ -6,8 +6,11 @@ import org.example.entity.Course;
 import org.example.util.ConnectionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.graph.GraphSemantic;
 
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CourseDaoImpl implements CourseDao {
@@ -30,9 +33,26 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    @BatchSize(size = 4)
     public List<Course> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(FIND_ALL_QUERY, Course.class).list();
+        }
+    }
+
+    public List<Course> findAllWithTeacher() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(FIND_ALL_QUERY, Course.class)
+                    .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("withTeacher"))
+                    .list();
+        }
+    }
+
+    public Course findByIdWithTeacher(Integer id) {
+        try (Session session = sessionFactory.openSession()) {
+            Map<String, Object> properties = Map.of(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("withTeacher"));
+            session.find(Course.class, id, properties);
+            return session.find(Course.class, id, properties);
         }
     }
 

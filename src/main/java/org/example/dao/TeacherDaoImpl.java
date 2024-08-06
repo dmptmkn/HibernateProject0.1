@@ -36,6 +36,13 @@ public class TeacherDaoImpl implements TeacherDao {
         }
     }
 
+    public List<Teacher> findAllWithCourses() {
+        try (Session session = sessionFactory.openSession()) {
+            session.enableFetchProfile("withCourses");
+            return session.createQuery(FIND_ALL_QUERY, Teacher.class).list();
+        }
+    }
+
     @Override
     public List<String> getAllNames() {
         try (Session session = sessionFactory.openSession()) {
