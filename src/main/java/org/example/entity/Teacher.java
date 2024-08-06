@@ -2,12 +2,15 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
+@FetchProfile(name = "withCourses", fetchOverrides = {
+        @FetchProfile.FetchOverride(entity = Teacher.class, association = "courses", mode = FetchMode.JOIN)
+})
 @Getter
 @Setter
 @ToString(exclude = "courses")
@@ -26,7 +29,7 @@ public class Teacher {
     private Integer age;
     @OneToMany
     @JoinColumn(name = "teacher_id")
-    private Set<Course> courses = new HashSet<>();
+    private List<Course> courses = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
