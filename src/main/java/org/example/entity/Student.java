@@ -5,9 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,7 +28,7 @@ public class Student {
     @JoinTable(name = "subscriptions",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private Set<Course> courses = new HashSet<>();
+    private List<Course> courses = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
