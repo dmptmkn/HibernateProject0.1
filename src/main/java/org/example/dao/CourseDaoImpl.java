@@ -70,6 +70,20 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
+    public List<Course> findAllWithTeacherAgeGTAndDurationLT(Integer teacherAge, Integer duration) {
+        try (Session session = sessionFactory.openSession()) {
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
+            JpaRoot<Course> root = query.from(Course.class);
+
+            query.select(root).where(builder.and(
+                    builder.gt(root.get("teacher").get("age"), teacherAge)),
+                    builder.lt(root.get("duration"), duration));
+
+            return session.createQuery(query).list();
+        }
+    }
+
     @Override
     public List<String> getAllNames() {
         try (Session session = sessionFactory.openSession()) {
