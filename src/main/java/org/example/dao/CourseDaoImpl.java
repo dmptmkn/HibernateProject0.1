@@ -10,10 +10,8 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.graph.GraphSemantic;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.hibernate.query.criteria.JpaCriteriaQuery;
-import org.hibernate.query.criteria.JpaRoot;
 
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CourseDaoImpl implements CourseDao {
@@ -51,21 +49,26 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
-    public Course findByIdWithTeacher(Integer id) {
-        try (Session session = sessionFactory.openSession()) {
-            Map<String, Object> properties = Map.of(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("withTeacher"));
-            session.find(Course.class, id, properties);
-            return session.find(Course.class, id, properties);
-        }
-    }
-
     public List<Course> findAllWithDurationGT(Integer duration) {
         try (Session session = sessionFactory.openSession()) {
             HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
             JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
-            JpaRoot<Course> root = query.from(Course.class);
 
+            var root = query.from(Course.class);
             query.select(root).where(builder.gt(root.get("duration"), duration));
+
+            return session.createQuery(query).list();
+        }
+    }
+
+    public List<Course> findAllWithPriceGT(Integer price) {
+        try (Session session = sessionFactory.openSession()) {
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
+
+            var root = query.from(Course.class);
+            query.select(root).where(builder.gt(root.get("price"), price));
+
             return session.createQuery(query).list();
         }
     }
@@ -74,13 +77,52 @@ public class CourseDaoImpl implements CourseDao {
         try (Session session = sessionFactory.openSession()) {
             HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
             JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
-            JpaRoot<Course> root = query.from(Course.class);
 
+            var root = query.from(Course.class);
             query.select(root).where(builder.and(
-                    builder.gt(root.get("teacher").get("age"), teacherAge)),
-                    builder.lt(root.get("duration"), duration));
+                    builder.gt(root.get("teacher").get("age"), teacherAge),
+                    builder.lt(root.get("duration"), duration)));
 
             return session.createQuery(query).list();
+        }
+    }
+
+    public List<Course> findAllWithPriceBetween(Integer from, Integer to) {
+        try (Session session = sessionFactory.openSession()) {
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
+
+            var root = query.from(Course.class);
+            query.select(root).where(builder.between(root.get("price"), from, to));
+
+            return session.createQuery(query).list();
+        }
+    }
+
+    public List<Course> findAllWithTeacherAgeGTOrDurationGT(Integer teacherAge, Integer duration) {
+        try (Session session = sessionFactory.openSession()) {
+
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
+
+            var root = query.from(Course.class);
+            query.select(root).where(builder.or(
+                    builder.gt(root.get("teacher").get("age"), teacherAge),
+                    builder.gt(root.get("duration"), duration)));
+
+            return session.createQuery(query).list();
+        }
+    }
+
+    public List<Course> findFirstFiveWithMaxDuration() {
+        try (Session session = sessionFactory.openSession()) {
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            JpaCriteriaQuery<Course> query = builder.createQuery(Course.class);
+
+            var root = query.from(Course.class);
+            query.select(root).orderBy(builder.desc(root.get("duration")));
+
+            return session.createQuery(query).setMaxResults(5).list();
         }
     }
 
