@@ -27,7 +27,7 @@ public class Teacher {
     private String name;
     private Integer salary;
     private Integer age;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "teacher_id")
     private List<Course> courses = new ArrayList<>();
 
