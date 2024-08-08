@@ -1,9 +1,5 @@
 package org.example.printer;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.example.dao.Dao;
-
 import java.io.PrintStream;
 import java.text.ChoiceFormat;
 
@@ -24,5 +20,4 @@ public abstract class Printer {
         int rule = 11 <= (age % 100) && (age % 100) <= 14 ? age : age % 10;
         return String.valueOf(age) + ' ' + format.format(rule);
     }
-
 }
